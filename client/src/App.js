@@ -5,10 +5,13 @@ import Layout from './components/Layout';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 
+
 function App() {
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
   const [newTodo, setNewTodo] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleCharactersError = (value) => {
     if (value.length < 3 || value.length > 50) {
@@ -24,9 +27,10 @@ function App() {
     handleCharactersError(todo);
 
     try {
-      await axios.post('http://localhost:8080/create', {
+      await axios.post(`${API_BASE_URL}/create`, {
         todo,
       });
+      getAllTodos();
     } catch (err) {
       console.error(err.message);
     }
@@ -35,7 +39,7 @@ function App() {
   const getAllTodos = async () => {
     try {
       await axios
-        .get('http://localhost:8080/')
+        .get(`${API_BASE_URL}/`)
         .then((response) => {
           setTodoList(response.data);
         });
@@ -49,7 +53,7 @@ function App() {
 
     try {
       await axios
-        .put(`http://localhost:8080/update/${id}`, {
+        .put(`${API_BASE_URL}/update/${id}`, {
           id,
           todo: newTodo,
         })
@@ -60,6 +64,9 @@ function App() {
               val.id === id ? {id: val.id, todo: val.todo} : val
             )
           );
+          getAllTodos();
+          setNewTodo('');
+          setEditingId(null);
         });
     } catch (err) {
       console.error(err.message);
@@ -69,9 +76,10 @@ function App() {
   const deleteTodo = async (id) => {
     try {
       await axios
-        .delete(`http://localhost:8080/${id}`)
+        .delete(`${API_BASE_URL}/${id}`)
         .then((response) => {
           setTodoList(todoList.filter((val) => val.id !== id));
+          getAllTodos();
         });
     } catch (err) {
       console.error(err.message);
@@ -86,7 +94,7 @@ function App() {
 
   useEffect(() => {
     getAllTodos();
-  }, [todoList]);
+  }, []);
 
   return (
     <div className='App'>
@@ -97,6 +105,9 @@ function App() {
           setNewTodo={setNewTodo}
           updateTodo={updateTodo}
           deleteTodo={deleteTodo}
+          editingId={editingId}
+          setEditingId={setEditingId}
+          newTodo={newTodo}
         />
       </Layout>
     </div>

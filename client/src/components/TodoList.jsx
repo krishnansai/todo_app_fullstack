@@ -5,7 +5,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
 const TodoList = (props) => {
-  const {todoList, setNewTodo, updateTodo, deleteTodo} = props;
+  const { todoList, setNewTodo, updateTodo, deleteTodo, editingId, setEditingId, newTodo } = props;
 
   return (
     <ListGroup as='ul'>
@@ -28,9 +28,17 @@ const TodoList = (props) => {
                 }}
               >
                 <InputGroup>
-                  <FormControl
+                  {/* <FormControl
                     placeholder='Edit todo'
                     onChange={(event) => {
+                      setNewTodo(event.target.value);
+                    }}
+                  /> */}
+                  <FormControl
+                    placeholder="Edit todo"
+                    value={editingId === val.id ? newTodo : ''}
+                    onChange={(event) => {
+                      setEditingId(val.id);
                       setNewTodo(event.target.value);
                     }}
                   />
@@ -43,7 +51,7 @@ const TodoList = (props) => {
                 </InputGroup>
               </Form>
               <Button
-                style={{marginLeft: 10}}
+                style={{ marginLeft: 10 }}
                 variant='outline-danger'
                 onClick={() => deleteTodo(val.id)}
               >

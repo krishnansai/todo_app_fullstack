@@ -15,15 +15,34 @@ TodoRouter.get('/', async (req, res) => {
 
     res.send('Values inserted successfully');
   })
-  .delete('/:id', async (req, res) => {
-    const todo = await TodoRecord.getOne(req.params.id);
-    await todo.delete();
-  })
-  .put('/update/:id', async (req, res) => {
-    const todo = await TodoRecord.getOne(req.params.id);
-    await todo.update(req.body.id, req.body.todo);
-  });
+.delete('/:id', async (req, res) => {
+  const { id } = req.params;
 
+  const todoRecord = await TodoRecord.getOne(id);
+  if (!todoRecord) {
+    return res.status(404).send('Todo not found');
+  }
+
+  await todoRecord.delete();
+
+  res.send(`Todo with id ${id} deleted successfully`);
+})
+  .put('/update/:id', async (req, res) => {
+  const { id } = req.params;
+  const { todo } = req.body;
+
+  // You can log for debugging
+  console.log(`Updating todo ${id} to value: ${todo}`);
+
+  const todoRecord = await TodoRecord.getOne(id);
+  if (!todoRecord) {
+    return res.status(404).send('Todo not found');
+  }
+
+  await todoRecord.update(id, todo);
+
+  res.send(`Todo with id ${id} updated successfully`);
+})
 module.exports = {
   TodoRouter,
 };
