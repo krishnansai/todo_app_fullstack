@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const {TodoRouter} = require('./routers/todos');
-require('./utils/db');
+const { TodoRouter } = require('./routers/todos');
+const { initPool } = require('./utils/db');
 
 const app = express();
 
@@ -12,6 +12,14 @@ app.use('/', TodoRouter);
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+(async () => {
+  try {
+    await initPool();
+    app.listen(PORT, () => {
+      console.log(`✅ Server listening on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ Failed to initialize database:", err);
+    process.exit(1);
+  }
+})();

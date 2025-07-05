@@ -1,5 +1,5 @@
-const {v4: uuid} = require('uuid');
-const {pool} = require('../utils/db');
+const { v4: uuid } = require('uuid');
+const { getPool } = require('../utils/db'); // Use getPool
 
 class TodoRecord {
   constructor(obj) {
@@ -14,21 +14,22 @@ class TodoRecord {
   }
 
   static async listAll() {
+    const pool = getPool();
     const [results] = await pool.execute('SELECT * FROM `todos`');
     return results.map((obj) => new TodoRecord(obj));
   }
 
   static async getOne(id) {
+    const pool = getPool();
     const [results] = await pool.execute(
       'SELECT * FROM `todos` WHERE `id` = :id',
-      {
-        id,
-      }
+      { id }
     );
     return results.length === 0 ? null : new TodoRecord(results[0]);
   }
 
   async insert() {
+    const pool = getPool();
     if (!this.id) {
       this.id = uuid();
     }
@@ -42,6 +43,7 @@ class TodoRecord {
   }
 
   async update(id, todo) {
+    const pool = getPool();
     await pool.execute('UPDATE `todos` SET `todo` = :todo WHERE `id` = :id', {
       id,
       todo,
@@ -49,6 +51,7 @@ class TodoRecord {
   }
 
   async delete() {
+    const pool = getPool();
     await pool.execute('DELETE FROM `todos` WHERE `id` = :id', {
       id: this.id,
     });
