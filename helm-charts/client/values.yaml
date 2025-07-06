@@ -2,7 +2,7 @@ apiVersion: v1
 replicaCount: 2
 image:
   repository: 250139002704.dkr.ecr.us-east-1.amazonaws.com/todolist-client
-  tag: de2c3ca1915d603351e4da76c3cddcbdfb1ddd1f
+  tag: 6d25e9384b52972c562a78bc18eb4d87a25a23e0
   pullPolicy: IfNotPresent
 service:
   enabled: true
