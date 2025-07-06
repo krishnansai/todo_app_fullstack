@@ -14,6 +14,7 @@ env:
   ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   CLIENT_REPO: todolist-client
   SERVER_REPO: todolist-server
+  REACT_APP_API_BASE_URL: http://todo-server-server.default.svc.cluster.local:8080
 
 jobs:
   build-and-push:
@@ -42,6 +43,7 @@ jobs:
           echo "AWS_REGION: $AWS_REGION"
           echo "CLIENT_REPO: $CLIENT_REPO"
           echo "SERVER_REPO: $SERVER_REPO"
+          echo "REACT_APP_API_BASE_URL: $REACT_APP_API_BASE_URL"
 
       # Build and push client image
       - name: Build and push multi-arch client image
@@ -50,6 +52,8 @@ jobs:
           context: ./client
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: |
+            REACT_APP_API_BASE_URL=${{ env.REACT_APP_API_BASE_URL }}
           tags: |
             ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CLIENT_REPO }}:latest
             ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CLIENT_REPO }}:${{ github.sha }}
@@ -70,7 +74,7 @@ jobs:
           sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
-      - name: Update image tag in server and client values.yaml
+      - name: Update image tags in Helm values.yaml
         run: |
           yq -i ".image.tag = \"${GITHUB_SHA}\"" helm-charts/server/values.yaml
           yq -i ".image.tag = \"${GITHUB_SHA}\"" helm-charts/client/values.yaml
