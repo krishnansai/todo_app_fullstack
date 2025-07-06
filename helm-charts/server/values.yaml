@@ -6,7 +6,7 @@ image:
 service:
   enabled: true
   name: todo-server
-  type: ClusterIP
+  type: LoadBalancer
   port: 8080
   targetPort: 8080
   annotations: {}
