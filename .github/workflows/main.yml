@@ -33,6 +33,13 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Debug environment variables
+        run: |
+          echo "ACCOUNT_ID: $ACCOUNT_ID"
+          echo "AWS_REGION: $AWS_REGION"
+          echo "CLIENT_REPO: $CLIENT_REPO"
+          echo "SERVER_REPO: $SERVER_REPO"
+
       # Build and push client image
       - name: Build and push multi-arch client image
         uses: docker/build-push-action@v5
