@@ -14,7 +14,7 @@ env:
   ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   CLIENT_REPO: todolist-client
   SERVER_REPO: todolist-server
-  REACT_APP_API_BASE_URL: http://todo-server-server.default.svc.cluster.local:8080
+  REACT_APP_API_BASE_URL: http://a7989b15a8d55467fa3105bcf5da698b-555298074.us-east-1.elb.amazonaws.com:8080
 
 jobs:
   build-and-push:

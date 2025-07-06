@@ -8,8 +8,8 @@ service:
   enabled: true
   name: todo-client
   type: LoadBalancer
-  port: 3000
-  targetPort: 3000
+  port: 80
+  targetPort: 80
   annotations: {}
 resources: {}
 autoscaling:
