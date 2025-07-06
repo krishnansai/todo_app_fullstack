@@ -3,12 +3,12 @@ name: Build and Push Multi-Arch Docker Images to ECR
 on:
   push:
     branches:
+      - stage
       - main
-      - master
 
 env:
-  AWS_REGION: us-east-1
-  ACCOUNT_ID: 250139002704
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   CLIENT_REPO: todolist-client
   SERVER_REPO: todolist-server
 
@@ -54,3 +54,8 @@ jobs:
           tags: |
             ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.SERVER_REPO }}:latest
             ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.SERVER_REPO }}:${{ github.sha }}
+
+      - name: Update image tag in server and client values.yaml
+        run: |
+          yq -i '.image.tag = "${{ github.sha }}"' helm-charts/server/values.yaml
+          yq -i '.image.tag = "${{ github.sha }}"' helm-charts/client/values.yaml

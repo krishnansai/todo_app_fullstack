@@ -1,0 +1,16 @@
+name: server
+version: 0.1.0
+description: A Helm chart for the server application
+type: application
+apiVersion: v2
+maintainers:
+  - name: Your Name
+    email: your.email@example.com
+keywords:
+  - server
+  - helm
+  - kubernetes
+home: https://example.com
+sources:
+  - https://github.com/your-repo/server
+dependencies: []
