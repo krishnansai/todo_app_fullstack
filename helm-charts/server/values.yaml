@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: 250139002704.dkr.ecr.us-east-1.amazonaws.com/todolist-server
-  tag: af040784e135c10483aab33f938c04b5038af64e
+  tag: 475d323e8fdb77fee2c4ddd1afa731a7debd7a8d
   pullPolicy: IfNotPresent
 service:
   enabled: true
